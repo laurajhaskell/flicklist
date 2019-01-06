@@ -29,16 +29,10 @@ function discoverMovies(callback) {
 			
 			// TODO 2
 			// update the model, setting its .browseItems property equal to the movies we recieved in the response
+			model.browseItems = response.results;
 			
-			var movieList = response[1]; 
-
-			for (var i=0; i<movieList.length; i++) {
-				movieList = movieList[i];
-				var url = 'https://api.themoviedb.org/3' + movieList;
-				$model.browseItems.append('<li><a href="' + url + '">' + movieList + '</a></li>');
-			};
 			// invoke the callback function that was passed in. 
-			callback(discoverMovies);
+			callback();
 		}
 	});
   
@@ -51,7 +45,8 @@ function discoverMovies(callback) {
 function render() {
   // TODO 7
   // clear everything from both lists
-  
+ 	$("#section-watchlist ul").empty();
+	$("#section-browse ul").empty();
   // TODO 6
   // for each movie on the user's watchlist, insert a list item into the <ul> in the watchlist section
   
@@ -59,15 +54,32 @@ function render() {
   model.browseItems.forEach(function(movie) {
 		// TODO 3
 		// insert a list item into the <ul> in the browse section
-		
+		model.watchlistItems.forEach(function(movie) {
+			var title = $("<p></p>").text(movie.original_title);
+			var itemView = $("<li></li>")
+			  .append(title)
 		// TODO 4
 		// the list item should include a button that says "Add to Watchlist"
-		
+		model.browseItems.forEach(function(movie) {
+			var title = $("<h4></h4>").text(movie.original_title);
+			var button = $("<button></button>")
+			  .text("Add to Watchlist")
+			  .click(function() {
+				model.watchlistItems.push(movie);
+				render();
+			  });
 		// TODO 5
 		// when the button is clicked, this movie should be added to the model's watchlist and render() should be called again
-  });
+		var itemView = $("<li></li>")
+		.append($("<hr/>"))
+		.append(title)
+		.append(button);
+
+		$("#section-browse ul").append(itemView);
+
+	});
   
-}
+})
 
 
 // When the HTML document is ready, we call the discoverMovies function,
@@ -75,4 +87,3 @@ function render() {
 $(document).ready(function() {
   discoverMovies(render);
 });
-
