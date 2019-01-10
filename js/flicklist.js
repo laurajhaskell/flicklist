@@ -72,8 +72,9 @@ function render() {
 		// when the button is clicked, this movie should be added to the model's watchlist and render() should be called again
 			model.watchlistItems.push(movie);
 			render();
+		});
+		itemView.append(button);
 	});
-	itemView.append(button);
 }
 
 // When the HTML document is ready, we call the discoverMovies function,
